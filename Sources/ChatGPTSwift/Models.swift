@@ -10,7 +10,7 @@ import Foundation
 public struct Message: Codable {
     public let role: String
     public let content: String
-    
+    // UPDATE TO HANDLE NEW PROPERTIES FOR ASSISTANT ID
     public init(role: String, content: String) {
         self.role = role
         self.content = content
@@ -22,7 +22,7 @@ extension Array where Element == Message {
     var contentCount: Int { map { $0.content }.count }
     var content: String { reduce("") { $0 + $1.content } }
 }
-
+// ADD PROPERTIES FROM REQUEST 
 struct Request: Codable {
     let model: String
     let temperature: Double

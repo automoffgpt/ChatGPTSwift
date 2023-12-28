@@ -7,7 +7,7 @@ final class ChatGPTSwiftTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
         
-        let api = ChatGPTAPI(apiKey: "API_KEY")
+        let api = ChatGPTAPI(apiKey: "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")
         
         Task {
             do {

@@ -16,10 +16,11 @@ import GPTEncoder
 
 public class ChatGPTAPI: @unchecked Sendable {
     
+    // constant parameters that can be added to the message sent to the API
     public enum Constants {
-        public static let defaultModel = "gpt-3.5-turbo"
+        public static let defaultModel = "gpt-4-1106-preview"
         public static let defaultSystemText = "You're a helpful assistant"
-        public static let defaultTemperature = 0.5
+        public static let defaultTemperature = 0.9
     }
     
     private let urlString = "https://api.openai.com/v1/chat/completions"
@@ -175,12 +176,15 @@ public class ChatGPTAPI: @unchecked Sendable {
         headers.forEach {  urlRequest.setValue($1, forHTTPHeaderField: $0) }
         return urlRequest
     }
-
+    
+    // Need to add the above parameters here to send to the API
     public func sendMessageStream(text: String,
                                   model: String = ChatGPTAPI.Constants.defaultModel,
                                   systemText: String = ChatGPTAPI.Constants.defaultSystemText,
                                   temperature: Double = ChatGPTAPI.Constants.defaultTemperature) async throws -> AsyncThrowingStream<String, Error> {
         var urlRequest = self.urlRequest
+        
+        // update to take additional parameters
         urlRequest.httpBody = try jsonBody(text: text, model: model, systemText: systemText, temperature: temperature)
         let (result, response) = try await urlSession.bytes(for: urlRequest)
         try Task.checkCancellation()
@@ -219,12 +223,14 @@ public class ChatGPTAPI: @unchecked Sendable {
             return nil
         }
     }
-
+    // UPDATE WITH PARAMETERS FROM ABOVE
     public func sendMessage(text: String,
                             model: String = ChatGPTAPI.Constants.defaultModel,
                             systemText: String = ChatGPTAPI.Constants.defaultSystemText,
                             temperature: Double = ChatGPTAPI.Constants.defaultTemperature) async throws -> String {
         var urlRequest = self.urlRequest
+        
+        // IDEM UPDATE PARAMETERS
         urlRequest.httpBody = try jsonBody(text: text, model: model, systemText: systemText, temperature: temperature, stream: false)
         
         let (data, response) = try await urlSession.data(for: urlRequest)
